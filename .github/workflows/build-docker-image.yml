@@ -1,22 +1,22 @@
-名称：构建和推送Docker镜像
+name: Build and Push Docker Image
 
 on:
   push:
-分支：[主]
+    branches: [ main ]
     paths:
       - 'Dockerfile'
       - 'index.js'
       - 'package.json'
   pull_request:
-分支：[主]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
-上运行:ubuntu-latest
+    runs-on: ubuntu-latest
     permissions:
-内容:读
-包:写
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout repository
@@ -26,20 +26,20 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-用户名：${{github。演员}}
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - 名字: Set up Docker Buildx
-使用: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - 名字: Build and push Docker image
-使用: docker/build-push-action@v5
-与:
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ github.repository_owner }}/niko:9928
+            ghcr.io/${{ github.repository_owner }}/neko:3213
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.description=HTTP Server
